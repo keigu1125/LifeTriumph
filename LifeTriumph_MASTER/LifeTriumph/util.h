@@ -315,21 +315,22 @@ void initMode()
 
 void initMatch()
 {
-  match++;
+  matchCount++;
   gameCount = 0;
   winCount = 0;
   loseCount = 0;
   drawCount = 0;
-}
-
-void initHist()
-{
-  m_winCount = 0;
-  m_loseCount = 0;
-  m_drawCount = 0;
-  matchCount = 0;
   for (int i = 0; i < MATCH_GAME_MAX; i++)
   {
     g_his[i] = 0;
   }
+}
+
+void initHist()
+{
+  initMatch();
+  matchCount = 0;
+  m_winCount = 0;
+  m_loseCount = 0;
+  m_drawCount = 0;
 }
