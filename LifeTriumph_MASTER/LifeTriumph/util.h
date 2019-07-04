@@ -84,55 +84,16 @@ byte getMinute(long l)
 
 String getHMS(long lStop)
 {
+  if (lStop < 0)
+  {
+    lStop *= -1;
+  }
+  
   byte h = (byte)(lStop / 1000 / 3600);
   byte m = getMinute(lStop);
   byte s = (byte)(lStop / 1000 % 60);
 
   return String(h) + ":" + ((m < 10) ? "0" + String(m) : String(m)) + ":" + ((s < 10) ? "0" + String(s) : String(s));
-}
-
-void checkAlarm()
-{
-  if (!isTimer || tStop >= millis())
-  {
-    return;
-  }
-
-  pressPole = true;
-  isTimer = false;
-  tStop = 0;
-  byte toneCnt = 0;
-  long toneStart = millis();
-  while (!someButtonPressed())
-  {
-    int time = millis() - toneStart;
-    if ((toneCnt == 0 && time >= 0) || (toneCnt == 1 && time >= 250))
-    {
-      toneCnt++;
-      if (setting.isLedTimer)
-      {
-        ab.setRGBled(1, 0, 0);
-      }
-      if (setting.isSoundTimer)
-      {
-        ab.tunes.tone(setting.baseTone, 200);
-      }
-    }
-    else if (toneCnt == 2)
-    {
-      toneCnt++;
-      ab.setRGBled(0, 0, 0);
-    }
-    else if (time > 1000)
-    {
-      toneCnt = 0;
-      toneStart = millis();
-    }
-  }
-
-  ab.setRGBled(0, 0, 0);
-  pressPole = true;
-  pressFirst = false;
 }
 
 void drawArrowLeft(byte x, byte y, bool white)

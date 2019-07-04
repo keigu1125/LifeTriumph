@@ -44,9 +44,9 @@ void setup()
   ab.invert(setting.blackScreen);
   isTitle = (setting.showTitle);
   isMain = !isTitle;
-  isSound = (setting.isSoundDefault);
   isInvertOpponent = (setting.invertOpponent);
-
+  tStop = setting.timerDefaultMin * 60000;
+  
   activeMenu();
 }
 
@@ -59,7 +59,6 @@ void loop()
   ab.clear();
   disp();
   ab.display();
-  checkAlarm();
   button();
   fpsSetting();
 }
@@ -111,7 +110,6 @@ void button()
   if (!someButtonPressed())
   {
     pressFirst = true;
-    pressPole = false;
     if (tPressed + DISP_RESET_SECOND < millis())
     {
       tPressed = 0;
@@ -144,28 +142,11 @@ void button()
   }
 
   pressButton();
-  buttonSound();
 }
 
 bool allowButtonPress()
 {
-  return pressFirst || (!pressPole && (tPressed < millis()));
-}
-
-void buttonSound()
-{
-  if (!isSound)
-  {
-    return;
-  }
-
-  int t1 = setting.baseTone;
-  if (life->isCursor)
-  {
-    int l = p[life->cursor].life;
-    t1 += (l >= 100) ? (TONE_ONELIFE * 80) : (l <= -20) ? (TONE_ONELIFE * -40) : ((l - 20) * TONE_ONELIFE);
-  }
-  ab.tunes.tone(t1, 20);
+  return (pressFirst || tPressed < millis());
 }
 
 Form* setActiveForm()

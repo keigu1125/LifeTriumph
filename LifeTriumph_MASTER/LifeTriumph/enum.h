@@ -14,10 +14,10 @@ enum SettingMenuTitle
 {
   SMT_HEAD = 0,
   SMT_MENU = 0,
-  SMT_TITLE = 1,
+  SMT_MATCH = 1,
   SMT_SOUND = 2,
   SMT_DISPLAY = 3,
-  SMT_LED = 4,
+  SMT_TIMER = 4,
   SMT_FRAME = 5,
   SMT_EXIT = 6,
   SMT_TAIL = 6,

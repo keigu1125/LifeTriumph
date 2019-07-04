@@ -20,11 +20,11 @@ class DisplayMenu : public Form
       if (isCursor)
       {
         ab.drawRect(x + 1, y + 1, 25, 39, WHITE);
-        if (cursor != M_HEAD)
+        if (setting.menuRotate || cursor != M_HEAD)
         {
           ab.drawBitmap(x + 8, y +  1, i_arrow_up, 11, 7, WHITE);
         }
-        if (cursor != M_TAIL)
+        if (setting.menuRotate || cursor != M_TAIL)
         {
           ab.drawBitmap(x + 8, y + 32, i_arrow_down, 11, 7, WHITE);
         }
@@ -57,12 +57,26 @@ class DisplayMenu : public Form
 
     virtual void upButton()
     {
-      while (subValue(&cursor, Menu::M_HEAD) && !utils[cursor]->isEnable) {}
+      if (setting.menuRotate && cursor == Menu::M_HEAD)
+      {
+        cursor = Menu::M_TAIL;
+      }
+      else
+      {
+        while (subValue(&cursor, Menu::M_HEAD) && !utils[cursor]->isEnable) {}
+      }
     }
 
     virtual void downButton()
     {
-      while (addValue(&cursor, Menu::M_TAIL) && !utils[cursor]->isEnable) {}
+      if (setting.menuRotate && cursor == Menu::M_TAIL)
+      {
+        cursor = Menu::M_HEAD;
+      }
+      else
+      {
+        while (addValue(&cursor, Menu::M_TAIL) && !utils[cursor]->isEnable) {}
+      }
     }
 
     virtual void leftButton()
@@ -103,6 +117,7 @@ class DisplayMenu : public Form
           utils[cursor]->execute();
           break;
         case Menu::M_SETTING:
+          winLoseRatio = (byte)((double)(setting.sumMatchWin) / (double)(setting.sumMatchWin + setting.sumMatchLose) * 100);
           activeSetting();
           break;
       }

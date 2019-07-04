@@ -2,29 +2,24 @@ class Setting
 {
 #define DEF_IS_WRITE_SETTING    0x01
 #define DEF_SHOW_TITLE          0x01
-#define DEF_IS_SOUND_DEFAULT    0x01
-#define DEF_IS_SOUND_TIMER      0x01
-#define DEF_BASE_TONE           1000
 #define DEF_IS_LED_TIMER        0x01
-#define DEF_TIMER_DEFAULT_MIN   50
 #define DEF_FRAME_RATE_MAIN     30
 #define DEF_FRAME_RATE_SLEEP    0x03
+#define DEF_TIMER_DEFAULT_MIN   50
 #define DEF_BLACK_SCREEN        0x00
 #define DEF_INVERT_OPPONENT     0x00
 #define DEF_MENU_ENABLE_DICE    0x01
 #define DEF_MENU_ENABLE_DISCARD 0x01
 #define DEF_MENU_ENABLE_STORM   0x01
 #define DEF_MENU_ENABLE_COUNT   0x01
-#define DEF_SUM_GAME_WIN        0x00
-#define DEF_SUM_GAME_LOSE       0x00
-#define DEF_SUM_GAME_DRAW       0x00
+#define DEF_MENU_ROTATE         0x00
+#define DEF_SUM_MATCH_WIN        0x00
+#define DEF_SUM_MATCH_LOSE       0x00
+#define DEF_SUM_MATCH_DRAW       0x00
 
   public:
     byte isWritedSetting = 0x00;
     byte showTitle = 0x00;
-    byte isSoundDefault = 0x00;
-    byte isSoundTimer = 0x00;
-    int  baseTone = 0;
     byte isLedTimer = 0x00;
     byte timerDefaultMin = 0x00;
     byte frameRateMain = 0x00;
@@ -36,9 +31,9 @@ class Setting
     byte menuEnableStorm = 0x00;
     byte menuEnableCount = 0x00;
     byte menuRotate = 0x00;
-    int  sumGameWin = 0x00;
-    int  sumGameLose = 0x00;
-    int  sumGameDraw = 0x00;
+    byte sumMatchWin = 0x00;
+    byte sumMatchLose = 0x00;
+    byte sumMatchDraw = 0x00;
 
     void readEepRomSetting()
     {
@@ -51,9 +46,6 @@ class Setting
       }
 
       showTitle = EEPROM.read(point++);
-      isSoundDefault = EEPROM.read(point++);
-      isSoundTimer = EEPROM.read(point++);
-      baseTone = (EEPROM.read(point++) << 8) | EEPROM.read(point++);
       isLedTimer = EEPROM.read(point++);
       timerDefaultMin = EEPROM.read(point++);
       frameRateMain = EEPROM.read(point++);
@@ -65,9 +57,10 @@ class Setting
       menuEnableStorm = EEPROM.read(point++);
       menuEnableCount = EEPROM.read(point++);
       menuRotate = EEPROM.read(point++);
-      sumGameWin = (EEPROM.read(point++) << 8) | EEPROM.read(point++);
-      sumGameLose = (EEPROM.read(point++) << 8) | EEPROM.read(point++);
-      sumGameDraw = (EEPROM.read(point++) << 8) | EEPROM.read(point++);
+      sumMatchWin = EEPROM.read(point++);
+      sumMatchLose = EEPROM.read(point++);
+      sumMatchDraw = EEPROM.read(point++);
+      
     }
 
     void writeEepRomSetting()
@@ -76,10 +69,6 @@ class Setting
       byte point = 16;
       EEPROM.write(point++, isWritedSetting);
       EEPROM.write(point++, showTitle);
-      EEPROM.write(point++, isSoundDefault);
-      EEPROM.write(point++, isSoundTimer);
-      EEPROM.write(point++, ((baseTone >> 8) & 0xFF));
-      EEPROM.write(point++, (baseTone & 0xFF));
       EEPROM.write(point++, isLedTimer);
       EEPROM.write(point++, timerDefaultMin);
       EEPROM.write(point++, frameRateMain);
@@ -90,15 +79,16 @@ class Setting
       EEPROM.write(point++, menuEnableDiscard);
       EEPROM.write(point++, menuEnableStorm);
       EEPROM.write(point++, menuEnableCount);
+      EEPROM.write(point++, menuRotate);
+      EEPROM.write(point++, sumMatchWin);
+      EEPROM.write(point++, sumMatchLose);
+      EEPROM.write(point++, sumMatchDraw);
     }
 
     void setDefaultSetting()
     {
       isWritedSetting = DEF_IS_WRITE_SETTING;
       showTitle = DEF_SHOW_TITLE;
-      isSoundDefault = DEF_IS_SOUND_DEFAULT;
-      isSoundTimer = DEF_IS_SOUND_TIMER;
-      baseTone = DEF_BASE_TONE;
       isLedTimer = DEF_IS_LED_TIMER;
       timerDefaultMin = DEF_TIMER_DEFAULT_MIN;
       frameRateMain = DEF_FRAME_RATE_MAIN;
@@ -109,6 +99,10 @@ class Setting
       menuEnableDiscard = DEF_MENU_ENABLE_DISCARD;
       menuEnableStorm = DEF_MENU_ENABLE_STORM;
       menuEnableCount = DEF_MENU_ENABLE_COUNT;
+      menuRotate = DEF_MENU_ROTATE;
+      sumMatchWin = DEF_SUM_MATCH_WIN;
+      sumMatchLose = DEF_SUM_MATCH_LOSE;
+      sumMatchDraw = DEF_SUM_MATCH_DRAW;
     }
 
   private:

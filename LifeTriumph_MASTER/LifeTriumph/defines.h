@@ -9,9 +9,6 @@
 #define TONE_MIN      200
 #define PLAYER_COUNT  4
 
-// displayTime.h
-#define ALARM_DEFAULT 3000000
-
 // displayMenu.h
 #define MENU_ICON_SIZE_X  11
 #define MENU_ICON_SIZE_Y  14
@@ -23,7 +20,7 @@
 #define MATCH_DRAW (byte)3
 #define MATCH_PL_MAX (byte)2
 #define MATCH_GAME_MAX  (byte)3
-#define MATCH_HIST_MAX (byte)20
+#define MATCH_HIST_MAX (byte)16
 
 // displayLife.h
 #define CURSOR_RECT_W 9

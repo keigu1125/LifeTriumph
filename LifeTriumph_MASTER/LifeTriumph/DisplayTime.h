@@ -1,8 +1,11 @@
 class DisplayTime : public Form
 {
   private:
-  public:
+    byte ledCount = 0;
+    byte toneCnt = 0;
+    long toneStart = 0;
 
+  public:
     DisplayTime()
     {
       x = 1;
@@ -15,6 +18,7 @@ class DisplayTime : public Form
     void DisplayTime::display()
     {
       dispTimer();
+      alarm();
     }
 
     void execute()
@@ -37,7 +41,7 @@ class DisplayTime : public Form
       if (isTimer)
       {
         // Start
-        tStop = ALARM_DEFAULT;
+        tStop = setting.timerDefaultMin * 60000;
         tStop += millis();
       }
       else
@@ -57,17 +61,28 @@ class DisplayTime : public Form
       }
 
       ab.drawBitmap(x + 51, y - 1, (isTimer) ? i_s_play : i_s_stop, 9, 9, WHITE);
+
+      long tDisp = 0;
       byte w = 0;
       if (isTimer)
       {
-        drawText(x + 6, y, 1, getHMS(tStop - millis()));
-        w = getMinute(tStop - millis());
+        tDisp = tStop - millis();
       }
       else
       {
-        drawText(x + 6, y, 1, getHMS(tStop));
-        w = getMinute(tStop);
+        tDisp = tStop;
       }
+
+      if (tStop < millis())
+      {
+        drawText(x + 2, y, 1, "-" + getHMS(tDisp));
+      }
+      else
+      {
+        drawText(x + 6, y, 1, getHMS(tDisp));
+      }
+
+      w = getMinute(tDisp);
 
       ab.fillRect(x + 64, y, w > setting.timerDefaultMin ? setting.timerDefaultMin : w, 3, WHITE);
       ab.drawLine(x + 64, y + 6, x + 64 + setting.timerDefaultMin, y + 6, WHITE);
@@ -78,6 +93,46 @@ class DisplayTime : public Form
         byte lineX = x + 64 + i;
         byte lineY = y + 6;
         ab.drawLine(lineX, lineY - hight, lineX, lineY, WHITE);
+      }
+    }
+
+    void alarm()
+    {
+      if (!isAlarm || tStop >= millis())
+      {
+        return;
+      }
+
+      if (ledCount == 0)
+      {
+        toneStart = millis();
+        ledCount++;
+      }
+
+      if (!someButtonPressed() && ledCount <= 5)
+      {
+        int time = millis() - toneStart;
+        if ((toneCnt == 0 && time >= 0) || (toneCnt == 1 && time >= 250))
+        {
+          toneCnt++;
+          ab.setRGBled(ledCount, 0, 0);
+        }
+        else if (toneCnt == 2)
+        {
+          toneCnt++;
+          ab.setRGBled(0, 0, 0);
+        }
+        else if (time > 1000)
+        {
+          toneCnt = 0;
+          ledCount++;
+          toneStart = millis();
+        }
+      }
+      else
+      {
+        ab.setRGBled(0, 0, 0);
+        isAlarm = false;
       }
     }
 };

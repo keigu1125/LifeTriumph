@@ -223,16 +223,21 @@ class DisplayMatch : public Form
         if (format->win > format->lose)
         {
           format->m_win++;
+          setting.sumMatchWin++;
         }
         else if (format->win < format->lose)
         {
           format->m_lose++;
+          setting.sumMatchLose++;
         }
         else
         {
           format->m_draw++;
+          setting.sumMatchDraw++;
         }
 
+        setting.writeEepRomSetting();
+        
         cursorC = 0;
         isMatching = false;
       }
@@ -240,6 +245,7 @@ class DisplayMatch : public Form
       initGame();
       isCursorUtil = false;
       activeLife();
+      isAlarm = setting.isLedTimer;
     }
 
     virtual void abButton()
