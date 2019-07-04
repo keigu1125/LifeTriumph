@@ -7,7 +7,7 @@ class Setting
 #define DEF_FRAME_RATE_SLEEP    0x03
 #define DEF_TIMER_DEFAULT_MIN   50
 #define DEF_BLACK_SCREEN        0x00
-#define DEF_INVERT_OPPONENT     0x00
+#define DEF_INVERT_OPPONENT     0x01
 #define DEF_MENU_ENABLE_DICE    0x01
 #define DEF_MENU_ENABLE_DISCARD 0x01
 #define DEF_MENU_ENABLE_STORM   0x01
@@ -60,7 +60,7 @@ class Setting
       sumMatchWin = EEPROM.read(point++);
       sumMatchLose = EEPROM.read(point++);
       sumMatchDraw = EEPROM.read(point++);
-      
+
     }
 
     void writeEepRomSetting()

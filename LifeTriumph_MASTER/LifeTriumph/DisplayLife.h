@@ -1,6 +1,7 @@
 class DisplayLife : public Form
 {
   private:
+    bool isLifeLink = false;
   public:
 
     DisplayLife()
@@ -34,6 +35,12 @@ class DisplayLife : public Form
         changeLife = 0;
       }
       p[0].life++;
+
+      if (isLifeLink)
+      {
+        p[1].life--;
+      }
+
       changeLife++;
     }
 
@@ -44,7 +51,14 @@ class DisplayLife : public Form
         cursor = 1;
         changeLife = 0;
       }
+
       p[1].life--;
+
+      if (isLifeLink)
+      {
+        p[0].life++;
+      }
+
       changeLife--;
     }
 
@@ -55,7 +69,14 @@ class DisplayLife : public Form
         cursor = 0;
         changeLife = 0;
       }
+
       p[0].life--;
+
+      if (isLifeLink)
+      {
+        p[1].life++;
+      }
+
       changeLife--;
     }
 
@@ -66,38 +87,28 @@ class DisplayLife : public Form
         cursor = 1;
         changeLife = 0;
       }
+
       p[1].life++;
+
+      if (isLifeLink)
+      {
+        p[0].life--;
+      }
+
       changeLife++;
     }
 
     virtual void aButton()
     {
       changeLife = 0;
+      isLifeLink = false;
       activeMenu();
     }
 
     virtual void bButton()
     {
-      // LifeLink?
+      isLifeLink = !isLifeLink;
     }
-
-    //    virtual void aButton()
-    //    {
-    //      char value = (cursor == 0) ? - 1 : + 1;
-    //
-    //      p[0].life += value;
-    //      p[1].life -= value;
-    //      changeLife--;
-    //    }
-    //
-    //    virtual void bButton()
-    //    {
-    //      char value = (cursor == 0) ? + 1 : - 1;
-    //
-    //      p[0].life += value;
-    //      p[1].life -= value;
-    //      changeLife++;
-    //    }
 
     virtual void abButton()
     {
@@ -108,8 +119,18 @@ class DisplayLife : public Form
   private:
     void DisplayLife::drawFrame()
     {
-      ab.drawLine(x + (w / 2), y, x + (w / 2), h - 1, WHITE);
+      byte xCenter = x + (w / 2);
+      byte yCenter = y + (h / 2);
+      ab.drawLine(xCenter, y, xCenter, h - 1, WHITE);
       ab.drawRect(x, y, w, h, WHITE);
+
+      if (isLifeLink)
+      {
+        ab.drawLine(xCenter - 4, yCenter, xCenter, yCenter - 6, WHITE);
+        ab.drawLine(xCenter - 4, yCenter, xCenter, yCenter + 6, WHITE);
+        ab.drawLine(xCenter + 4, yCenter, xCenter, yCenter - 6, WHITE);
+        ab.drawLine(xCenter + 4, yCenter, xCenter, yCenter + 6, WHITE);
+      }
     }
 
     void DisplayLife::drawCursor()
@@ -124,7 +145,7 @@ class DisplayLife : public Form
         Player pl = p[i];
 
         int life = pl.life;
-        byte fSize = 2;
+        byte fSize = 3;
         byte drawX = pl.x + x;
         byte drawY = pl.y + y;
 
@@ -132,19 +153,19 @@ class DisplayLife : public Form
         {
           drawX += 7;
           drawY += 14;
-          // fSize = 2;
+          fSize = 2;
         }
         else if (life >= 0 && life <= 9)
         {
           drawX += 17;
           drawY += 10;
-          fSize = 3;
+          // fSize = 3;
         }
         else
         {
           drawX += 8;
           drawY += 10;
-          fSize = 3;
+          // fSize = 3;
         }
 
         drawText(drawX, drawY, fSize, life, isInvertOpponent && pl.invert);

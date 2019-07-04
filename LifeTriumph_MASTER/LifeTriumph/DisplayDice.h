@@ -42,17 +42,13 @@ class DisplayDice : public Form
 
     void execute()
     {
-      for (byte i = 0; i < dCount; i++)
-      {
-        d1[i] = random(6) + 1;
-        d2[i] = random(6) + 1;
-      }
-
       dSum1 = 0;
       dSum2 = 0;
 
       for (byte i = 0; i < dCount; i++)
       {
+        d1[i] = random(6) + 1;
+        d2[i] = random(6) + 1;
         dSum1 += d1[i];
         dSum2 += d2[i];
       }

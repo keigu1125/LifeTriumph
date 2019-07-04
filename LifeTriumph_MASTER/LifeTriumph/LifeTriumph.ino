@@ -37,8 +37,6 @@ void setup()
   utils[4] = counter;
   utils[5] = sett;
 
-  format = new Format();
-
   initMode();
   ab.setFrameRate(setting.frameRateMain);
   ab.invert(setting.blackScreen);
@@ -46,7 +44,7 @@ void setup()
   isMain = !isTitle;
   isInvertOpponent = (setting.invertOpponent);
   tStop = setting.timerDefaultMin * 60000;
-  
+
   activeMenu();
 }
 
@@ -99,7 +97,6 @@ void dispTitle()
   {
     isTitle = false;
     isMain = true;
-    return;
   }
 
   ab.drawBitmap(0, 0, mtg_logo, 128, 64, WHITE);

@@ -20,7 +20,6 @@
 #define MATCH_DRAW (byte)3
 #define MATCH_PL_MAX (byte)2
 #define MATCH_GAME_MAX  (byte)3
-#define MATCH_HIST_MAX (byte)16
 
 // displayLife.h
 #define CURSOR_RECT_W 9
@@ -39,5 +38,27 @@
 #define HIGHT 8
 #define IND   12
 
-//format.h
-#define INIT_LIFE_NORMAL 20
+// enum
+enum Menu
+{
+  M_HEAD = 0,
+  M_MATCH = 0,
+  M_DICE = 1,
+  M_DISCARD = 2,
+  M_STORM = 3,
+  M_COUNT = 4,
+  M_SETTING = 5,
+  M_TAIL = 5
+};
+
+enum SettingMenuTitle
+{
+  SMT_HEAD = 0,
+  SMT_MENU = 0,
+  SMT_MATCH = 1,
+  SMT_DISPLAY = 2,
+  SMT_TIMER = 3,
+  SMT_FRAME = 4,
+  SMT_EXIT = 5,
+  SMT_TAIL = 5,
+};

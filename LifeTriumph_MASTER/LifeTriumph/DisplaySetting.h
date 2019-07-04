@@ -69,8 +69,6 @@ class DisplaySetting : public Form
           break;
         case SMT_MATCH:
           break;
-        case SMT_SOUND:
-          break;
         case SMT_DISPLAY:
           switch (cursorC)
           {
@@ -100,7 +98,6 @@ class DisplaySetting : public Form
           {
             case 1:
               subValue(&setting.frameRateMain, 0x01);
-              ab.setFrameRate(setting.frameRateMain);
               break;
             case 2:
               subValue(&setting.frameRateSleep, 0x01);
@@ -144,8 +141,6 @@ class DisplaySetting : public Form
           break;
         case SMT_MATCH:
           break;
-        case SMT_SOUND:
-          break;
         case SMT_DISPLAY:
           switch (cursorC)
           {
@@ -175,7 +170,6 @@ class DisplaySetting : public Form
           {
             case 0x01:
               addValue(&setting.frameRateMain, 60);
-              ab.setFrameRate(setting.frameRateMain);
               break;
             case 0x02:
               addValue(&setting.frameRateSleep, setting.frameRateMain);
@@ -214,17 +208,16 @@ class DisplaySetting : public Form
                 setting.sumMatchLose = 0x00;
                 setting.sumMatchDraw = 0x00;
               }
-              setting.writeEepRomSetting();
               break;
             case 0x02:
               activeMenu();
               return;
             case 0x03:
               setting.isWritedSetting = 0x00;
-              setting.writeEepRomSetting();
               break;
           }
 
+          setting.writeEepRomSetting();
           delay(1000);
           asm volatile ("   jmp 0");
           break;
@@ -242,8 +235,6 @@ class DisplaySetting : public Form
           return "MENU ";
         case SMT_MATCH:
           return "MATCH";
-        case SMT_SOUND:
-          return "SOUND";
         case SMT_DISPLAY:
           return "DISP ";
         case SMT_TIMER:
@@ -320,9 +311,6 @@ class DisplaySetting : public Form
           drawText(drawX + IND + 50, drawY + (row++ * HIGHT) + 1, 1, String(setting.sumMatchDraw));
           drawText(drawX, drawY + (row * HIGHT), 1, "Ratio : ");
           drawText(drawX + IND + 50, drawY + (row++ * HIGHT) + 1, 1, String(winLoseRatio) + " %");
-          break;
-        case SMT_SOUND:
-          cursorCMax = 0;
           break;
         case SMT_DISPLAY:
           cursorCMax = 3;

@@ -88,7 +88,7 @@ String getHMS(long lStop)
   {
     lStop *= -1;
   }
-  
+
   byte h = (byte)(lStop / 1000 / 3600);
   byte m = getMinute(lStop);
   byte s = (byte)(lStop / 1000 % 60);
@@ -282,7 +282,7 @@ void initPlayerLife()
 {
   for (auto& pl : p)
   {
-    pl.life = INIT_LIFE_NORMAL;
+    pl.life = 20;
   }
   changeLife = 0;
 }
@@ -306,9 +306,30 @@ void initMode()
 {
   pCount = 2;
   setXY(0,  0,  0, 48, 41);
-  setXY(1, 49,  0, 48, 41);
+  setXY(1, 48,  0, 48, 41);
   p[0].invert = false;
   p[1].invert = true;
 
   initGame();
+}
+
+void initMatch()
+{
+  match++;
+  gameCount = 0;
+  winCount = 0;
+  loseCount = 0;
+  drawCount = 0;
+}
+
+void initHist()
+{
+  m_winCount = 0;
+  m_loseCount = 0;
+  m_drawCount = 0;
+  matchCount = 0;
+  for (int i = 0; i < MATCH_GAME_MAX; i++)
+  {
+    g_his[i] = 0;
+  }
 }
