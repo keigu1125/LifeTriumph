@@ -28,7 +28,8 @@ class DisplayDice : public Form
         return;
       }
 
-      drawUtilForm(true);
+      ab.drawRect(31, 43, 97, 11, WHITE);
+      ab.drawLine(79, 43, 79, 53, WHITE);
 
       for (byte i = 0; i < dCount; i++)
       {

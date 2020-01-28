@@ -69,31 +69,48 @@ void initArray(byte** ar, byte size_2, byte size_1)
   }
 }
 
-void initArray(byte*** ar, byte size_3, byte size_2, byte size_1)
+byte getHour(long l)
 {
-  for (byte i = 0; i < size_3; i++)
+  if (l < 0)
   {
-    initArray(ar[i], size_2, size_1);
+    l *= -1;
   }
+  
+  return (byte)(l / 1000 / 3600);
 }
 
 byte getMinute(long l)
 {
+  if (l < 0)
+  {
+    l *= -1;
+  }
+  
   return (byte)(l / 1000 / 60 % 60);
+}
+
+byte getSecond(long l)
+{
+  if (l < 0)
+  {
+    l *= -1;
+  }
+  
+  return (byte)(l / 1000 % 60);
 }
 
 String getHMS(long lStop)
 {
-  if (lStop < 0)
-  {
-    lStop *= -1;
-  }
-
-  byte h = (byte)(lStop / 1000 / 3600);
+  byte h = getHour(lStop);
   byte m = getMinute(lStop);
-  byte s = (byte)(lStop / 1000 % 60);
+  byte s = getSecond(lStop);
 
   return String(h) + ":" + ((m < 10) ? "0" + String(m) : String(m)) + ":" + ((s < 10) ? "0" + String(s) : String(s));
+}
+
+bool isOverTime(long l)
+{
+  return (l / 1000 % 60) < 0;
 }
 
 void drawArrowLeft(byte x, byte y, bool white)
@@ -227,15 +244,6 @@ char* getOnOff(byte value)
   return value == 0x00 ? "OFF" : "0N";
 }
 
-void drawUtilForm(bool isSeparate)
-{
-  ab.drawRect(31, 43, 97, 11, WHITE);
-  if (isSeparate)
-  {
-    ab.drawLine(79, 43, 79, 53, WHITE);
-  }
-}
-
 void activeMenu()
 {
   menu->isCursor = !isCursorUtil;
@@ -287,21 +295,6 @@ void initPlayerLife()
   changeLife = 0;
 }
 
-void initCounter()
-{
-  for (auto &pl : p)
-  {
-    pl.counter = 0;
-  }
-  changeCounter = 0;
-}
-
-void initGame()
-{
-  initPlayerLife();
-  initCounter();
-}
-
 void initMode()
 {
   pCount = 2;
@@ -310,27 +303,5 @@ void initMode()
   p[0].invert = false;
   p[1].invert = true;
 
-  initGame();
-}
-
-void initMatch()
-{
-  matchCount++;
-  gameCount = 0;
-  winCount = 0;
-  loseCount = 0;
-  drawCount = 0;
-  for (int i = 0; i < MATCH_GAME_MAX; i++)
-  {
-    g_his[i] = 0;
-  }
-}
-
-void initHist()
-{
-  initMatch();
-  matchCount = 0;
-  m_winCount = 0;
-  m_loseCount = 0;
-  m_drawCount = 0;
+  initPlayerLife();
 }

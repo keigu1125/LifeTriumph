@@ -4,11 +4,9 @@
 #include "DisplayMenu.h"
 #include "DisplayLife.h"
 #include "DisplayTime.h"
-#include "DisplayMatch.h"
 #include "DisplayDice.h"
 #include "DisplayDiscard.h"
 #include "DisplayStorm.h"
-#include "DisplayCounter.h"
 #include "DisplaySetting.h"
 
 void setup()
@@ -22,20 +20,17 @@ void setup()
 
   menu = new DisplayMenu();
   life = new DisplayLife();
-  time = new DisplayTime();
-  match = new DisplayMatch();
+  mTimer = new DisplayTime();
   dice = new DisplayDice();
   discard = new DisplayDiscard();
   storm = new DisplayStorm();
-  counter = new DisplayCounter();
   sett = new DisplaySetting();
 
-  utils[0] = match;
+  utils[0] = mTimer;
   utils[1] = dice;
   utils[2] = discard;
   utils[3] = storm;
-  utils[4] = counter;
-  utils[5] = sett;
+  utils[4] = sett;
 
   initMode();
   ab.setFrameRate(setting.frameRateMain);
@@ -43,6 +38,7 @@ void setup()
   isTitle = (setting.showTitle);
   isMain = !isTitle;
   isInvertOpponent = (setting.invertOpponent);
+  isEnableAlarm = (setting.isLedTimer || setting.isSoundTimer);
   tStop = setting.timerDefaultMin * 60000;
 
   activeMenu();
@@ -69,7 +65,7 @@ void disp()
   }
   else if (isMain)
   {
-    time->display();
+    mTimer->display();
     life->display();
     menu->display();
   }
@@ -107,11 +103,11 @@ void button()
   if (!someButtonPressed())
   {
     pressFirst = true;
+    pressPole = false;
     if (tPressed + DISP_RESET_SECOND < millis())
     {
       tPressed = 0;
       changeLife = 0;
-      changeCounter = 0;
     }
     return;
   }
@@ -139,11 +135,28 @@ void button()
   }
 
   pressButton();
+  buttonSound();
 }
 
 bool allowButtonPress()
 {
-  return (pressFirst || tPressed < millis());
+  return pressFirst || (!pressPole && (tPressed < millis()));
+}
+
+void buttonSound()
+{
+  if (!setting.isSoundKeyPress)
+  {
+    return;
+  }
+
+  int t1 = setting.baseTone;
+  if (life->isCursor)
+  {
+    int l = p[life->cursor].life;
+    t1 += (l >= 100) ? (TONE_ONELIFE * 80) : (l <= -20) ? (TONE_ONELIFE * -40) : ((l - 20) * TONE_ONELIFE);
+  }
+  ab.tunes.tone(t1, 20);
 }
 
 Form* setActiveForm()

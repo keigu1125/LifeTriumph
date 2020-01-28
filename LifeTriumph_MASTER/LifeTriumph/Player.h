@@ -5,7 +5,6 @@ struct Player
     byte y = 0;
     byte w = 0;
     byte h = 0;
-    byte counter = 0;
     int life = 0;
     bool invert = false;
 };

@@ -2,7 +2,6 @@ class DisplaySetting : public Form
 {
   private:
     byte cursorC = 0;
-    bool isResetMatch = false;
   public:
     byte cursorCMax = 0;
 
@@ -50,56 +49,69 @@ class DisplaySetting : public Form
         case SMT_MENU:
           switch (cursorC)
           {
-            case 1:
+            case 0x01:
               subValue(&setting.menuRotate, 0x00);
               break;
-            case 2:
+            case 0x02:
               subValue(&setting.menuEnableDice, 0x00);
               break;
-            case 3:
+            case 0x03:
               subValue(&setting.menuEnableDiscard, 0x00);
               break;
-            case 4:
+            case 0x04:
               subValue(&setting.menuEnableStorm, 0x00);
               break;
-            case 5:
-              subValue(&setting.menuEnableCount, 0x00);
-              break;
           }
-          break;
-        case SMT_MATCH:
           break;
         case SMT_DISPLAY:
           switch (cursorC)
           {
-            case 1:
+            case 0x01:
               subValue(&setting.showTitle, 0x00);
               break;
-            case 2:
+            case 0x02:
               subValue(&setting.blackScreen, 0x00);
               break;
-            case 3:
+            case 0x03:
               subValue(&setting.invertOpponent, 0x00);
+              break;
+          }
+          break;
+        case SMT_SOUND:
+          switch (cursorC)
+          {
+            case 0x01:
+              subValue(&setting.isSoundKeyPress, 0x00);
+              break;
+            case 0x02:
+              if (setting.baseTone > 100)
+              {
+                setting.baseTone -= 10;
+              }
               break;
           }
           break;
         case SMT_TIMER:
           switch (cursorC)
           {
-            case 1:
+            case 0x01:
               subValue(&setting.timerDefaultMin, 0x00);
               break;
-            case 2:
+            case 0x02:
+              subValue(&setting.isSoundTimer, 0x00);
+              break;
+            case 0x03:
               subValue(&setting.isLedTimer, 0x00);
+              break;
           }
           break;
         case SMT_FRAME:
           switch (cursorC)
           {
-            case 1:
+            case 0x01:
               subValue(&setting.frameRateMain, 0x01);
               break;
-            case 2:
+            case 0x02:
               subValue(&setting.frameRateSleep, 0x01);
               break;
           }
@@ -122,24 +134,19 @@ class DisplaySetting : public Form
         case SMT_MENU:
           switch (cursorC)
           {
-            case 1:
+            case 0x01:
               addValue(&setting.menuRotate, 0x01);
               break;
-            case 2:
+            case 0x02:
               addValue(&setting.menuEnableDice, 0x01);
               break;
-            case 3:
+            case 0x03:
               addValue(&setting.menuEnableDiscard, 0x01);
               break;
-            case 4:
+            case 0x04:
               addValue(&setting.menuEnableStorm, 0x01);
               break;
-            case 5:
-              addValue(&setting.menuEnableCount, 0x01);
-              break;
           }
-          break;
-        case SMT_MATCH:
           break;
         case SMT_DISPLAY:
           switch (cursorC)
@@ -154,6 +161,21 @@ class DisplaySetting : public Form
               addValue(&setting.invertOpponent, 0x01);
               break;
           }
+          break;
+        case SMT_SOUND:
+          switch (cursorC)
+          {
+            case 0x01:
+              addValue(&setting.isSoundKeyPress, 0x01);
+              break;
+            case 0x02:
+              if (setting.baseTone < 6000)
+              {
+                setting.baseTone += 10;
+              }
+              break;
+          }
+          break;
         case SMT_TIMER:
           switch (cursorC)
           {
@@ -161,6 +183,9 @@ class DisplaySetting : public Form
               addValue(&setting.timerDefaultMin, 60);
               break;
             case 0x02:
+              addValue(&setting.isSoundTimer, 0x01);
+              break;
+            case 0x03:
               addValue(&setting.isLedTimer, 0x01);
               break;
           }
@@ -184,30 +209,18 @@ class DisplaySetting : public Form
 
     virtual void bButton()
     {
-      if ((cursor != SMT_EXIT && cursor != SMT_MATCH) || cursorC == 0)
+      if (cursor != SMT_EXIT || cursorC == 0)
       {
         return;
       }
 
       switch (cursor)
       {
-        case SMT_MATCH:
-          if (cursorC == 1)
-          {
-            isResetMatch = !isResetMatch;
-          }
-          break;
         case SMT_EXIT:
           switch (cursorC)
           {
             case 0x01:
               setting.isWritedSetting = 0x01;
-              if (isResetMatch)
-              {
-                setting.sumMatchWin = 0x00;
-                setting.sumMatchLose = 0x00;
-                setting.sumMatchDraw = 0x00;
-              }
               break;
             case 0x02:
               activeMenu();
@@ -233,10 +246,10 @@ class DisplaySetting : public Form
       {
         case SMT_MENU:
           return "MENU ";
-        case SMT_MATCH:
-          return "MATCH";
         case SMT_DISPLAY:
           return "DISP ";
+        case SMT_SOUND:
+          return "SOUND";
         case SMT_TIMER:
           return "TIMER";
         case SMT_FRAME:
@@ -279,7 +292,7 @@ class DisplaySetting : public Form
       switch (cursor)
       {
         case SMT_MENU:
-          cursorCMax = 5;
+          cursorCMax = 4;
           drawText(drawX, drawY + (row * HIGHT), 1, "Menu Rotate");
           drawText(drawX + IND + 70, drawY + (row++ * HIGHT) + 1, 1, getOnOff(setting.menuRotate));
           drawText(drawX, drawY + (row * HIGHT), 1, "Use Dice");
@@ -288,29 +301,6 @@ class DisplaySetting : public Form
           drawText(drawX + IND + 70, drawY + (row++ * HIGHT) + 1, 1, getOnOff(setting.menuEnableDiscard));
           drawText(drawX, drawY + (row * HIGHT), 1, "Use Storm");
           drawText(drawX + IND + 70, drawY + (row++ * HIGHT) + 1, 1, getOnOff(setting.menuEnableStorm));
-          drawText(drawX, drawY + (row * HIGHT), 1, "Use Count");
-          drawText(drawX + IND + 70, drawY + (row++ * HIGHT) + 1, 1, getOnOff(setting.menuEnableCount));
-          break;
-        case SMT_MATCH:
-          cursorCMax = 1;
-          if (isResetMatch)
-          {
-            drawText(drawX, drawY + (row * HIGHT), 1, "* Will be Reset *");
-          }
-          else
-          {
-            drawText(drawX, drawY + (row * HIGHT), 1, "Reset MatchLog ?");
-          }
-          row++;
-          row++;
-          drawText(drawX, drawY + (row * HIGHT), 1, "Win   : ");
-          drawText(drawX + IND + 50, drawY + (row++ * HIGHT) + 1, 1, String(setting.sumMatchWin));
-          drawText(drawX, drawY + (row * HIGHT), 1, "Lose  : ");
-          drawText(drawX + IND + 50, drawY + (row++ * HIGHT) + 1, 1, String(setting.sumMatchLose));
-          drawText(drawX, drawY + (row * HIGHT), 1, "Draw  : ");
-          drawText(drawX + IND + 50, drawY + (row++ * HIGHT) + 1, 1, String(setting.sumMatchDraw));
-          drawText(drawX, drawY + (row * HIGHT), 1, "Ratio : ");
-          drawText(drawX + IND + 50, drawY + (row++ * HIGHT) + 1, 1, String(winLoseRatio) + " %");
           break;
         case SMT_DISPLAY:
           cursorCMax = 3;
@@ -321,11 +311,20 @@ class DisplaySetting : public Form
           drawText(drawX, drawY + (row++ * HIGHT), 1, "Invert Opponent");
           drawText(drawX + IND, drawY + (row++ * HIGHT) + 1, 1, getOnOff(setting.invertOpponent));
           break;
-        case SMT_TIMER:
+        case SMT_SOUND:
           cursorCMax = 2;
+          drawText(drawX, drawY + (row++ * HIGHT), 1, "KeyPress Sound");
+          drawText(drawX + IND, drawY + (row++ * HIGHT) + 1, 1, getOnOff(setting.isSoundKeyPress));
+          drawText(drawX, drawY + (row++ * HIGHT), 1, "Base Tone");
+          drawText(drawX + IND, drawY + (row++ * HIGHT) + 1, 1, String(setting.baseTone) + " Hz");
+          break;
+        case SMT_TIMER:
+          cursorCMax = 3;
           drawText(drawX, drawY + (row++ * HIGHT), 1, "Def Match Time");
           drawText(drawX + IND, drawY + (row++ * HIGHT) + 1, 1, String(setting.timerDefaultMin) + " min");
-          drawText(drawX, drawY + (row++ * HIGHT), 1, "Timer LED");
+          drawText(drawX, drawY + (row++ * HIGHT), 1, "Alarm Sound");
+          drawText(drawX + IND, drawY + (row++ * HIGHT) + 1, 1, getOnOff(setting.isSoundTimer));
+          drawText(drawX, drawY + (row++ * HIGHT), 1, "Alarm LED");
           drawText(drawX + IND, drawY + (row++ * HIGHT) + 1, 1, getOnOff(setting.isLedTimer));
           break;
         case SMT_FRAME:

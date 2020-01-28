@@ -13,12 +13,20 @@ class DisplayTime : public Form
       // isCursor = false;
       // cursor = 0;
       // cursorMax = 0;
+      icon = i_timer;
     }
 
     void DisplayTime::display()
     {
       dispTimer();
-      alarm();
+      if (isEnableAlarm && isAlarmOnce)
+      {
+        checkAlarm();
+        if (isAlarm)
+        {
+          alarm();
+        }
+      }
     }
 
     void execute()
@@ -32,7 +40,11 @@ class DisplayTime : public Form
     virtual void rightButton() {}
     virtual void aButton() {}
     virtual void bButton() {}
-    virtual void abButton() {}
+    virtual void abButton()
+    {
+      tStop = setting.timerDefaultMin * 60000;
+      isAlarmOnce = true;
+    }
 
     void toggle()
     {
@@ -41,7 +53,6 @@ class DisplayTime : public Form
       if (isTimer)
       {
         // Start
-        tStop = setting.timerDefaultMin * 60000;
         tStop += millis();
       }
       else
@@ -73,14 +84,11 @@ class DisplayTime : public Form
         tDisp = tStop;
       }
 
-      if (tStop < millis())
+      if (isOverTime(tDisp))
       {
-        drawText(x + 2, y, 1, "-" + getHMS(tDisp));
+        drawText(x + 0, y, 1, "-");
       }
-      else
-      {
-        drawText(x + 6, y, 1, getHMS(tDisp));
-      }
+      drawText(x + 6, y, 1, getHMS(tDisp));
 
       w = getMinute(tDisp);
 
@@ -96,26 +104,41 @@ class DisplayTime : public Form
       }
     }
 
-    void alarm()
+    void checkAlarm()
     {
-      if (!isAlarm || tStop >= millis())
+      if (!isTimer)
       {
         return;
       }
-
-      if (ledCount == 0)
+      
+      long tDisp = tStop - millis();
+      if (getSecond(tDisp) != 1 || !isOverTime(tDisp))
       {
-        toneStart = millis();
-        ledCount++;
+        return;
       }
+      
+      isAlarm = true;
+    }
 
-      if (!someButtonPressed() && ledCount <= 5)
+    void alarm()
+    {
+      pressPole = true;
+      byte toneCnt = 0;
+      long toneStart = millis();
+      while (!someButtonPressed())
       {
         int time = millis() - toneStart;
         if ((toneCnt == 0 && time >= 0) || (toneCnt == 1 && time >= 250))
         {
           toneCnt++;
-          ab.setRGBled(ledCount, 0, 0);
+          if (setting.isLedTimer)
+          {
+            ab.setRGBled(1, 0, 0);
+          }
+          if (setting.isSoundTimer)
+          {
+            ab.tunes.tone(setting.baseTone, 200);
+          }
         }
         else if (toneCnt == 2)
         {
@@ -125,14 +148,15 @@ class DisplayTime : public Form
         else if (time > 1000)
         {
           toneCnt = 0;
-          ledCount++;
           toneStart = millis();
         }
       }
-      else
-      {
-        ab.setRGBled(0, 0, 0);
-        isAlarm = false;
-      }
+      ab.setRGBled(0, 0, 0);
+      
+      pressPole = true;
+      pressFirst = false;
+      isAlarm = false;
+      isAlarmOnce = false;
     }
+
 };

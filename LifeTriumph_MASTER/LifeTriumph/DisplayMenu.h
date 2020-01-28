@@ -41,11 +41,10 @@ class DisplayMenu : public Form
 
       switch (menu->cursor)
       {
-        case Menu::M_MATCH:
+        //case Menu::M_TIMER:
         case Menu::M_DICE:
         case Menu::M_DISCARD:
         case Menu::M_STORM:
-        case Menu::M_COUNT:
           utils[cursor]->display();
           break;
         case Menu::M_SETTING:
@@ -109,21 +108,34 @@ class DisplayMenu : public Form
     virtual void bButton()
     {
       switch (cursor) {
-        case Menu::M_MATCH:
+        case Menu::M_TIMER:
         case Menu::M_DICE:
         case Menu::M_DISCARD:
         case Menu::M_STORM:
-        case Menu::M_COUNT:
           utils[cursor]->execute();
           break;
         case Menu::M_SETTING:
-          winLoseRatio = (byte)((double)(setting.sumMatchWin) / (double)(setting.sumMatchWin + setting.sumMatchLose) * 100);
           activeSetting();
           break;
       }
     }
 
-    virtual void abButton() {}
+    virtual void abButton()
+    {
+      switch (cursor) {
+        case Menu::M_TIMER:
+          if (!isTimer)
+          {
+            mTimer->abButton();
+          }
+          break;
+        case Menu::M_DICE:
+        case Menu::M_DISCARD:
+        case Menu::M_STORM:
+        case Menu::M_SETTING:
+          break;
+      }
+    }
 
   private:
     void dispChangeLife()
