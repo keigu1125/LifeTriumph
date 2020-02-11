@@ -56,9 +56,12 @@ class DisplaySetting : public Form
               subValue(&setting.menuEnableDice, 0x00);
               break;
             case 0x03:
-              subValue(&setting.menuEnableDiscard, 0x00);
+              subValue(&setting.menuEnableLog, 0x00);
               break;
             case 0x04:
+              subValue(&setting.menuEnableDiscard, 0x00);
+              break;
+            case 0x05:
               subValue(&setting.menuEnableStorm, 0x00);
               break;
           }
@@ -141,9 +144,12 @@ class DisplaySetting : public Form
               addValue(&setting.menuEnableDice, 0x01);
               break;
             case 0x03:
-              addValue(&setting.menuEnableDiscard, 0x01);
+              addValue(&setting.menuEnableLog, 0x01);
               break;
             case 0x04:
+              addValue(&setting.menuEnableDiscard, 0x01);
+              break;
+            case 0x05:
               addValue(&setting.menuEnableStorm, 0x01);
               break;
           }
@@ -292,11 +298,13 @@ class DisplaySetting : public Form
       switch (cursor)
       {
         case SMT_MENU:
-          cursorCMax = 4;
+          cursorCMax = 5;
           drawText(drawX, drawY + (row * HIGHT), 1, "Menu Rotate");
           drawText(drawX + IND + 70, drawY + (row++ * HIGHT) + 1, 1, getOnOff(setting.menuRotate));
           drawText(drawX, drawY + (row * HIGHT), 1, "Use Dice");
           drawText(drawX + IND + 70, drawY + (row++ * HIGHT) + 1, 1, getOnOff(setting.menuEnableDice));
+          drawText(drawX, drawY + (row * HIGHT), 1, "Use LifeLog");
+          drawText(drawX + IND + 70, drawY + (row++ * HIGHT) + 1, 1, getOnOff(setting.menuEnableLog));
           drawText(drawX, drawY + (row * HIGHT), 1, "Use Discard");
           drawText(drawX + IND + 70, drawY + (row++ * HIGHT) + 1, 1, getOnOff(setting.menuEnableDiscard));
           drawText(drawX, drawY + (row * HIGHT), 1, "Use Storm");

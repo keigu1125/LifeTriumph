@@ -38,7 +38,7 @@ class DisplayDice : public Form
       }
 
       drawText(x + 64, y + 2, 1, dSum1);
-      drawText(x + 113, y + 2, 1, dSum2, isInvertOpponent);
+      drawText(x + 113, y + 2, 1, dSum2, setting.invertOpponent);
     }
 
     void execute()
@@ -53,6 +53,8 @@ class DisplayDice : public Form
         dSum1 += d1[i];
         dSum2 += d2[i];
       }
+
+      icon = (random(2) == 0) ? i_dice_b : i_dice_w;
 
       setTime();
     }

@@ -4,6 +4,7 @@
 #include "DisplayMenu.h"
 #include "DisplayLife.h"
 #include "DisplayTime.h"
+#include "DisplayLog.h"
 #include "DisplayDice.h"
 #include "DisplayDiscard.h"
 #include "DisplayStorm.h"
@@ -22,26 +23,34 @@ void setup()
   life = new DisplayLife();
   mTimer = new DisplayTime();
   dice = new DisplayDice();
+  mLog = new DisplayLog();
   discard = new DisplayDiscard();
   storm = new DisplayStorm();
   sett = new DisplaySetting();
 
   utils[0] = mTimer;
   utils[1] = dice;
-  utils[2] = discard;
-  utils[3] = storm;
-  utils[4] = sett;
+  utils[2] = mLog;
+  utils[3] = discard;
+  utils[4] = storm;
+  utils[5] = sett;
 
-  initMode();
   ab.setFrameRate(setting.frameRateMain);
   ab.invert(setting.blackScreen);
   isTitle = (setting.showTitle);
   isMain = !isTitle;
-  isInvertOpponent = (setting.invertOpponent);
   isEnableAlarm = (setting.isLedTimer || setting.isSoundTimer);
   tStop = setting.timerDefaultMin * 60000;
+  initMode();
 
-  activeMenu();
+  if (abButtonPressed())
+  {
+    activeSetting();
+  }
+  else
+  {
+    activeMenu();
+  }
 }
 
 void loop()
@@ -95,7 +104,8 @@ void dispTitle()
     isMain = true;
   }
 
-  ab.drawBitmap(0, 0, mtg_logo, 128, 64, WHITE);
+  // ab.drawBitmap(0, 0, phy_logo, 128, 64, WHITE);
+  ab.drawBitmap(0, 0, blue_footed_booby_logo, 128, 64, WHITE);
 }
 
 void button()
@@ -107,7 +117,7 @@ void button()
     if (tPressed + DISP_RESET_SECOND < millis())
     {
       tPressed = 0;
-      changeLife = 0;
+      saveChangeLife();
     }
     return;
   }

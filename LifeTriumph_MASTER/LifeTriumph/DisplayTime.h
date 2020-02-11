@@ -12,7 +12,7 @@ class DisplayTime : public Form
       y = 57;
       // isCursor = false;
       // cursor = 0;
-      // cursorMax = 0;
+      cursorMax = 1;
       icon = i_timer;
     }
 
@@ -27,6 +27,11 @@ class DisplayTime : public Form
           alarm();
         }
       }
+
+      if (isCursor)
+      {
+        drawArrowLeft(x, y, WHITE);
+      }
     }
 
     void execute()
@@ -34,12 +39,58 @@ class DisplayTime : public Form
       toggle();
     }
 
-    virtual void upButton() {}
-    virtual void downButton() {}
-    virtual void leftButton() {}
-    virtual void rightButton() {}
-    virtual void aButton() {}
-    virtual void bButton() {}
+    virtual void upButton()
+    {
+      switch (cursor)
+      {
+        case 0:
+          tStop += 60000;
+          break;
+      }
+    }
+
+    virtual void downButton()
+    {
+      switch (cursor)
+      {
+        case 0:
+          long t = (isTimer) ? tStop - millis() : tStop;
+          if (t - 60000 > 0) {
+            tStop -= 60000;
+          }
+          break;
+      }
+    }
+
+    virtual void leftButton()
+    {
+      if (cursor == 0)
+      {
+        isCursorUtil = false;
+        activeMenu();
+        return;
+      }
+
+      rotateDown(&cursor, 0, cursorMax);
+    }
+
+    virtual void rightButton()
+    {
+      rotateUp(&cursor, 0, cursorMax);
+      if (cursor >= cursorMax)
+      {
+        isCursorUtil = false;
+        activeMenu();
+      }
+    }
+
+    virtual void aButton(){}
+
+    virtual void bButton()
+    {
+      toggle();
+    }
+
     virtual void abButton()
     {
       tStop = setting.timerDefaultMin * 60000;
@@ -71,7 +122,7 @@ class DisplayTime : public Form
         drawArrowLeft(x, y, WHITE);
       }
 
-      ab.drawBitmap(x + 51, y - 1, (isTimer) ? i_s_play : i_s_stop, 9, 9, WHITE);
+      ab.drawBitmap(x + 57, y - 1, (isTimer) ? i_s_play : i_s_stop, 9, 9, WHITE);
 
       long tDisp = 0;
       byte w = 0;
@@ -84,21 +135,17 @@ class DisplayTime : public Form
         tDisp = tStop;
       }
 
-      if (isOverTime(tDisp))
-      {
-        drawText(x + 0, y, 1, "-");
-      }
       drawText(x + 6, y, 1, getHMS(tDisp));
 
       w = getMinute(tDisp);
 
-      ab.fillRect(x + 64, y, w > setting.timerDefaultMin ? setting.timerDefaultMin : w, 3, WHITE);
-      ab.drawLine(x + 64, y + 6, x + 64 + setting.timerDefaultMin, y + 6, WHITE);
+      ab.fillRect(x + 71, y, w > setting.timerDefaultMin ? setting.timerDefaultMin : w, 3, WHITE);
+      ab.drawLine(x + 71, y + 6, x + 71 + setting.timerDefaultMin, y + 6, WHITE);
 
       for (byte i = 0; i <= setting.timerDefaultMin; i += 5)
       {
         byte hight = (i % 10 == 0) ? 2 : 1;
-        byte lineX = x + 64 + i;
+        byte lineX = x + 71 + i;
         byte lineY = y + 6;
         ab.drawLine(lineX, lineY - hight, lineX, lineY, WHITE);
       }

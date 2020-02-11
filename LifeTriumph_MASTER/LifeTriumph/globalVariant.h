@@ -5,7 +5,7 @@
 #include "Form.h"
 
 Arduboy ab;
-Player p[2];
+Player p[PLAYER_COUNT];
 
 Setting setting;
 long tStop = 0;
@@ -18,7 +18,7 @@ Form* sett;
 
 Form* util;
 Form* mTimer;
-Form* match;
+Form* mLog;
 Form* dice;
 Form* discard;
 Form* storm;
@@ -27,7 +27,6 @@ Form* utils[6];
 bool isTitle = false;
 bool isMain = false;
 bool isSound = true;
-bool isInvertOpponent = false;
 bool isTimer = false;
 bool isTwoSideFromt = true;
 bool pressFirst = true;
@@ -36,5 +35,4 @@ bool isEnableAlarm = false;
 bool isAlarm = false;
 bool isAlarmOnce = true;
 bool isCursorUtil = false;
-int changeLife = 0;
 byte pCount = 0;

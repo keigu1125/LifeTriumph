@@ -29,78 +29,27 @@ class DisplayLife : public Form
 
     virtual void upButton()
     {
-      if (cursor != 0)
-      {
-        cursor = 0;
-        changeLife = 0;
-      }
-      p[0].life++;
-
-      if (isLifeLink)
-      {
-        p[1].life--;
-      }
-
-      changeLife++;
+      addLife(0, 1);
     }
 
     virtual void downButton()
     {
-      if (cursor != 1)
-      {
-        cursor = 1;
-        changeLife = 0;
-      }
-
-      p[1].life--;
-
-      if (isLifeLink)
-      {
-        p[0].life++;
-      }
-
-      changeLife--;
+      addLife(1, -1);
     }
 
     virtual void leftButton()
     {
-      if (cursor != 0)
-      {
-        cursor = 0;
-        changeLife = 0;
-      }
-
-      p[0].life--;
-
-      if (isLifeLink)
-      {
-        p[1].life++;
-      }
-
-      changeLife--;
+      addLife(0, -1);
     }
 
     virtual void rightButton()
     {
-      if (cursor != 1)
-      {
-        cursor = 1;
-        changeLife = 0;
-      }
-
-      p[1].life++;
-
-      if (isLifeLink)
-      {
-        p[0].life--;
-      }
-
-      changeLife++;
+      addLife(1, 1);
     }
 
     virtual void aButton()
     {
-      changeLife = 0;
+      saveChangeLife();
       isLifeLink = false;
       activeMenu();
     }
@@ -113,7 +62,7 @@ class DisplayLife : public Form
     virtual void abButton()
     {
       initPlayerLife();
-      changeLife = 0;
+      saveChangeLife();
     }
 
   private:
@@ -140,7 +89,7 @@ class DisplayLife : public Form
 
     void DisplayLife::drawLife()
     {
-      for (byte i = 0; i < 2; i++)
+      for (byte i = 0; i < PLAYER_COUNT; i++)
       {
         Player pl = p[i];
 
@@ -168,7 +117,20 @@ class DisplayLife : public Form
           // fSize = 3;
         }
 
-        drawText(drawX, drawY, fSize, life, isInvertOpponent && pl.invert);
+        drawText(drawX, drawY, fSize, life, setting.invertOpponent && pl.invert);
+      }
+    }
+
+    void addLife(bool c, short value)
+    {
+      cursor = c;
+      p[cursor].life += value;
+      p[cursor].changeLife += value;
+
+      if (isLifeLink)
+      {
+        p[!cursor].life -= value;
+        p[!cursor].changeLife -= value;
       }
     }
 };

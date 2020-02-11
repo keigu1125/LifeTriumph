@@ -12,6 +12,7 @@ class Setting
 #define DEF_IS_SOUND_TIMER      0x01
 #define DEF_BASE_TONE           500
 #define DEF_MENU_ENABLE_DICE    0x01
+#define DEF_MENU_ENABLE_LOG     0x01
 #define DEF_MENU_ENABLE_DISCARD 0x01
 #define DEF_MENU_ENABLE_STORM   0x01
 #define DEF_MENU_ROTATE         0x00
@@ -29,6 +30,7 @@ class Setting
     byte isSoundTimer = 0x00;
     int  baseTone = 0;
     byte menuEnableDice = 0x00;
+    byte menuEnableLog = 0x00;
     byte menuEnableDiscard = 0x00;
     byte menuEnableStorm = 0x00;
     byte menuRotate = 0x00;
@@ -54,6 +56,7 @@ class Setting
       isSoundTimer = EEPROM.read(point++);
       baseTone = (EEPROM.read(point++) << 8) | EEPROM.read(point++);
       menuEnableDice = EEPROM.read(point++);
+      menuEnableLog = EEPROM.read(point++);
       menuEnableDiscard = EEPROM.read(point++);
       menuEnableStorm = EEPROM.read(point++);
       menuRotate = EEPROM.read(point++);
@@ -77,6 +80,7 @@ class Setting
       EEPROM.write(point++, ((baseTone >> 8) & 0xFF));
       EEPROM.write(point++, (baseTone & 0xFF));
       EEPROM.write(point++, menuEnableDice);
+      EEPROM.write(point++, menuEnableLog);
       EEPROM.write(point++, menuEnableDiscard);
       EEPROM.write(point++, menuEnableStorm);
       EEPROM.write(point++, menuRotate);
@@ -96,6 +100,7 @@ class Setting
       isSoundTimer = DEF_IS_SOUND_TIMER;
       baseTone = DEF_BASE_TONE;
       menuEnableDice = DEF_MENU_ENABLE_DICE;
+      menuEnableLog = DEF_MENU_ENABLE_LOG;
       menuEnableDiscard = DEF_MENU_ENABLE_DISCARD;
       menuEnableStorm = DEF_MENU_ENABLE_STORM;
       menuRotate = DEF_MENU_ROTATE;

@@ -5,6 +5,11 @@ bool someButtonPressed()
           ab.pressed(A_BUTTON)    || ab.pressed(B_BUTTON));
 }
 
+bool abButtonPressed()
+{
+  return (ab.pressed(A_BUTTON)    || ab.pressed(B_BUTTON));
+}
+
 bool rotateUp(byte* target, byte min, byte max)
 {
   if (*target == max)
@@ -99,18 +104,19 @@ byte getSecond(long l)
   return (byte)(l / 1000 % 60);
 }
 
+bool isOverTime(long l)
+{
+  return (l / 1000 % 60) < 0;
+}
+
 String getHMS(long lStop)
 {
+  bool isMinus = isOverTime(lStop);
   byte h = getHour(lStop);
   byte m = getMinute(lStop);
   byte s = getSecond(lStop);
 
-  return String(h) + ":" + ((m < 10) ? "0" + String(m) : String(m)) + ":" + ((s < 10) ? "0" + String(s) : String(s));
-}
-
-bool isOverTime(long l)
-{
-  return (l / 1000 % 60) < 0;
+  return ((isMinus) ? "-" : " ") + String(h) + ":" + ((m < 10) ? "0" + String(m) : String(m)) + ":" + ((s < 10) ? "0" + String(s) : String(s));
 }
 
 void drawArrowLeft(byte x, byte y, bool white)
@@ -291,8 +297,13 @@ void initPlayerLife()
   for (auto& pl : p)
   {
     pl.life = 20;
+    pl.changeLife = 0;
+    pl.logCount = 0;
+    for (auto& log : pl.lifeLog)
+    {
+      log = 0;
+    }
   }
-  changeLife = 0;
 }
 
 void initMode()
@@ -301,7 +312,42 @@ void initMode()
   setXY(0,  0,  0, 48, 41);
   setXY(1, 48,  0, 48, 41);
   p[0].invert = false;
-  p[1].invert = true;
+  p[1].invert = setting.invertOpponent;
 
   initPlayerLife();
+}
+
+void slideArray(short* ar, byte size)
+{
+  for (byte i = 0; i < size - 1; i++)
+  {
+    ar[i] = ar[i + 1];
+  }
+
+  ar[size - 1] = 0;
+}
+
+void saveChangeLife()
+{
+  for (auto& pl : p)
+  {
+    short cl = pl.changeLife;
+    if (cl == 0)
+    {
+      continue;
+    }
+
+    if (pl.logCount >= CHANGE_LIFE_LOG)
+    {
+      slideArray(pl.lifeLog, CHANGE_LIFE_LOG);
+    }
+
+    if (pl.logCount < CHANGE_LIFE_LOG)
+    {
+      pl.logCount++;
+    }
+
+    pl.lifeLog[pl.logCount - 1] = pl.life + (cl * -1);
+    pl.changeLife = 0;
+  }
 }

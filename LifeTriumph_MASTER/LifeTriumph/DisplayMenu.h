@@ -30,7 +30,7 @@ class DisplayMenu : public Form
         }
       }
 
-      if (changeLife == 0)
+      if (p[0].changeLife == 0 && p[1].changeLife == 0)
       {
         ab.drawBitmap(x + 8, y + 13, utils[cursor]->icon, MENU_ICON_SIZE_X, MENU_ICON_SIZE_Y, WHITE);
       }
@@ -43,6 +43,7 @@ class DisplayMenu : public Form
       {
         //case Menu::M_TIMER:
         case Menu::M_DICE:
+        case Menu::M_LOG:
         case Menu::M_DISCARD:
         case Menu::M_STORM:
           utils[cursor]->display();
@@ -110,6 +111,7 @@ class DisplayMenu : public Form
       switch (cursor) {
         case Menu::M_TIMER:
         case Menu::M_DICE:
+        case Menu::M_LOG:
         case Menu::M_DISCARD:
         case Menu::M_STORM:
           utils[cursor]->execute();
@@ -130,6 +132,7 @@ class DisplayMenu : public Form
           }
           break;
         case Menu::M_DICE:
+        case Menu::M_LOG:
         case Menu::M_DISCARD:
         case Menu::M_STORM:
         case Menu::M_SETTING:
@@ -140,14 +143,35 @@ class DisplayMenu : public Form
   private:
     void dispChangeLife()
     {
-      if (changeLife == 0)
+      if (p[0].changeLife == 0 && p[1].changeLife == 0)
       {
         return;
       }
-
-      byte addX = (changeLife >= 100 || changeLife <= -100) ? 2 : (changeLife >= 10 || changeLife <= -10) ? 5 : 8;
-      byte addY = 17;
-      drawText(x + addX, y + addY, 1, (changeLife > 0) ? "+" + String(changeLife) : changeLife);
+      else if (p[0].changeLife != 0 && p[1].changeLife != 0)
+      {
+        for (byte i = 0; i < PLAYER_COUNT; i++)
+        {
+          short cl = p[i].changeLife;
+          byte addX = (cl >= 100 || cl <= -100) ? 2 : (cl >= 10 || cl <= -10) ? 5 : 8;
+          byte addY = 12 + (i * 9);
+          drawText(x + addX, y + addY, 1, (cl > 0) ? "+" + String(cl) : cl);
+        }
+      }
+      else
+      {
+        short cl = 0;
+        if (p[0].changeLife == 0)
+        {
+          cl = p[1].changeLife;
+        }
+        else
+        {
+          cl = p[0].changeLife;
+        }
+        byte addX = (cl >= 100 || cl <= -100) ? 2 : (cl >= 10 || cl <= -10) ? 5 : 8;
+        byte addY = 17;
+        drawText(x + addX, y + addY, 1, (cl > 0) ? "+" + String(cl) : cl);
+      }
     }
 
 };
