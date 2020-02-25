@@ -84,7 +84,10 @@ class DisplayTime : public Form
       }
     }
 
-    virtual void aButton(){}
+    virtual void aButton()
+    {
+      activeLife();
+    }
 
     virtual void bButton()
     {
