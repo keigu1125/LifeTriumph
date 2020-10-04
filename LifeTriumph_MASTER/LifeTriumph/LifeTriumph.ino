@@ -49,7 +49,8 @@ void setup()
   }
   else
   {
-    activeMenu();
+    //activeMenu();
+    activeLife();
   }
 }
 
