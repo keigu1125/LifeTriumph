@@ -129,6 +129,11 @@ class DisplayDiscard : public Form
       initArray(card, CARD_MAX);
     }
 
+    virtual void udButton()
+    {
+      abButton();
+    }
+
   private:
 
 };

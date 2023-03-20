@@ -89,6 +89,11 @@ class DisplayStorm : public Form
       initArray(stormCount, STORM_MAX);
     }
 
+    virtual void udButton()
+    {
+      abButton();
+    }
+
   private:
 
 };

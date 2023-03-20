@@ -10,6 +10,11 @@ bool abButtonPressed()
   return (ab.pressed(A_BUTTON)    || ab.pressed(B_BUTTON));
 }
 
+bool upDownButtonPressed()
+{
+  return (ab.pressed(UP_BUTTON) || ab.pressed(DOWN_BUTTON));
+}
+
 bool rotateUp(byte* target, byte min, byte max)
 {
   if (*target == max)
@@ -80,7 +85,7 @@ byte getHour(long l)
   {
     l *= -1;
   }
-  
+
   return (byte)(l / 1000 / 3600);
 }
 
@@ -90,7 +95,7 @@ byte getMinute(long l)
   {
     l *= -1;
   }
-  
+
   return (byte)(l / 1000 / 60 % 60);
 }
 
@@ -100,7 +105,7 @@ byte getSecond(long l)
   {
     l *= -1;
   }
-  
+
   return (byte)(l / 1000 % 60);
 }
 
@@ -250,6 +255,25 @@ char* getOnOff(byte value)
   return value == 0x00 ? "OFF" : "0N";
 }
 
+char* getMenuName(byte value)
+{
+  switch (value)
+  {
+    case Menu::M_TIMER:
+      return "Timer";
+    case Menu::M_DICE:
+      return "Dice";
+    case Menu::M_LOG:
+      return "Log";
+    case Menu::M_DISCARD:
+      return "Discard";
+    case Menu::M_STORM:
+      return "Storn";
+    case Menu::M_SETTING:
+      return "Setting";
+  }
+}
+
 void activeMenu()
 {
   menu->isCursor = !isCursorUtil;
@@ -315,6 +339,14 @@ void initMode()
   p[1].invert = setting.invertOpponent;
 
   initPlayerLife();
+}
+
+void initMenuSelect()
+{
+  if (utils[setting.menuDefault]->isEnable)
+  {
+    menu->cursor = setting.menuDefault;
+  }
 }
 
 void slideArray(short* ar, byte size)

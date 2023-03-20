@@ -100,6 +100,11 @@ class DisplayTime : public Form
       isAlarmOnce = true;
     }
 
+    virtual void udButton()
+    {
+      abButton();
+    }
+
     void toggle()
     {
       isTimer = !isTimer;

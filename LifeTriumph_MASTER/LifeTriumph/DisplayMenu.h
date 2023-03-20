@@ -140,6 +140,8 @@ class DisplayMenu : public Form
       }
     }
 
+    virtual void udButton() {}
+
   private:
     void dispChangeLife()
     {

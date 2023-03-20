@@ -21,6 +21,7 @@ class Form
     virtual void aButton() = 0;
     virtual void bButton() = 0;
     virtual void abButton() = 0;
+    virtual void udButton() = 0;
 
     void setTime()
     {

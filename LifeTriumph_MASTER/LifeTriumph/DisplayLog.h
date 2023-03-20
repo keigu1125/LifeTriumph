@@ -56,6 +56,7 @@ class DisplayLog : public Form
     virtual void aButton() {}
     virtual void bButton() {}
     virtual void abButton() {}
+    virtual void udButton() {}
 
   private:
     void drawOneSmallNumber(byte x, byte y, byte number, bool color)

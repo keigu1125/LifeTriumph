@@ -16,6 +16,7 @@ class Setting
 #define DEF_MENU_ENABLE_DISCARD 0x01
 #define DEF_MENU_ENABLE_STORM   0x01
 #define DEF_MENU_ROTATE         0x00
+#define DEF_MENU_DEFAULT 0x00
 
   public:
     byte isWritedSetting = 0x00;
@@ -34,6 +35,7 @@ class Setting
     byte menuEnableDiscard = 0x00;
     byte menuEnableStorm = 0x00;
     byte menuRotate = 0x00;
+    byte menuDefault = 0x00;
 
     void readEepRomSetting()
     {
@@ -60,7 +62,7 @@ class Setting
       menuEnableDiscard = EEPROM.read(point++);
       menuEnableStorm = EEPROM.read(point++);
       menuRotate = EEPROM.read(point++);
-
+      menuDefault = EEPROM.read(point++);
     }
 
     void writeEepRomSetting()
@@ -84,6 +86,7 @@ class Setting
       EEPROM.write(point++, menuEnableDiscard);
       EEPROM.write(point++, menuEnableStorm);
       EEPROM.write(point++, menuRotate);
+      EEPROM.write(point++, menuDefault);
     }
 
     void setDefaultSetting()
@@ -104,6 +107,7 @@ class Setting
       menuEnableDiscard = DEF_MENU_ENABLE_DISCARD;
       menuEnableStorm = DEF_MENU_ENABLE_STORM;
       menuRotate = DEF_MENU_ROTATE;
+      menuDefault = DEF_MENU_DEFAULT;
     }
 
   private:

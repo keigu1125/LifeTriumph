@@ -64,6 +64,11 @@ class DisplayLife : public Form
       initPlayerLife();
       saveChangeLife();
     }
+    
+    virtual void udButton()
+    {
+      abButton();
+    }
 
   private:
     void DisplayLife::drawFrame()

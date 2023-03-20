@@ -66,6 +66,7 @@ class DisplayDice : public Form
     virtual void aButton() {}
     virtual void bButton() {}
     virtual void abButton() {}
+    virtual void udButton() {}
 
   private:
 

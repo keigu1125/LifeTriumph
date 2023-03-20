@@ -64,6 +64,9 @@ class DisplaySetting : public Form
             case 0x05:
               subValue(&setting.menuEnableStorm, 0x00);
               break;
+            case 0x06:
+              subValue(&setting.menuDefault, Menu::M_HEAD);
+              break;
           }
           break;
         case SMT_DISPLAY:
@@ -151,6 +154,9 @@ class DisplaySetting : public Form
               break;
             case 0x05:
               addValue(&setting.menuEnableStorm, 0x01);
+              break;
+            case 0x06:
+              addValue(&setting.menuDefault, Menu::M_TAIL);
               break;
           }
           break;
@@ -244,6 +250,7 @@ class DisplaySetting : public Form
     }
 
     virtual void abButton() {}
+    virtual void udButton() {}
 
   private:
     char* getMenuTitle(byte c)
@@ -298,7 +305,7 @@ class DisplaySetting : public Form
       switch (cursor)
       {
         case SMT_MENU:
-          cursorCMax = 5;
+          cursorCMax = 6;
           drawText(drawX, drawY + (row * HIGHT), 1, "Menu Rotate");
           drawText(drawX + IND + 70, drawY + (row++ * HIGHT) + 1, 1, getOnOff(setting.menuRotate));
           drawText(drawX, drawY + (row * HIGHT), 1, "Use Dice");
@@ -309,6 +316,8 @@ class DisplaySetting : public Form
           drawText(drawX + IND + 70, drawY + (row++ * HIGHT) + 1, 1, getOnOff(setting.menuEnableDiscard));
           drawText(drawX, drawY + (row * HIGHT), 1, "Use Storm");
           drawText(drawX + IND + 70, drawY + (row++ * HIGHT) + 1, 1, getOnOff(setting.menuEnableStorm));
+          drawText(drawX, drawY + (row * HIGHT), 1, "DEFAULT : ");
+          drawText(drawX + IND + 48, drawY + (row++ * HIGHT) + 1, 1, getMenuName(setting.menuDefault));
           break;
         case SMT_DISPLAY:
           cursorCMax = 3;

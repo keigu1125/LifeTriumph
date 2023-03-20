@@ -42,7 +42,9 @@ void setup()
   isEnableAlarm = (setting.isLedTimer || setting.isSoundTimer);
   tStop = setting.timerDefaultMin * 60000;
   initMode();
+  initMenuSelect();
 
+  // **FOR Arduboy EEPROM INITIALIZE**
   if (abButtonPressed())
   {
     activeSetting();
@@ -105,8 +107,8 @@ void dispTitle()
     isMain = true;
   }
 
-  // ab.drawBitmap(0, 0, phy_logo, 128, 64, WHITE);
-  ab.drawBitmap(0, 0, blue_footed_booby_logo, 128, 64, WHITE);
+  ab.drawBitmap(0, 0, phy_logo, 128, 64, WHITE);
+  // ab.drawBitmap(0, 0, blue_footed_booby_logo, 128, 64, WHITE);
 }
 
 void button()
@@ -203,7 +205,11 @@ void pressButton()
     return;
   }
 
-  if (ab.pressed(UP_BUTTON))
+  if (ab.pressed(UP_BUTTON) && ab.pressed(DOWN_BUTTON))
+  {
+    activeForm->udButton();
+  }
+  else if (ab.pressed(UP_BUTTON))
   {
     activeForm->upButton();
   }
