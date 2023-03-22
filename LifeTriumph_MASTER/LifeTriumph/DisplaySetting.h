@@ -269,6 +269,8 @@ class DisplaySetting : public Form
           return "FRAME";
         case SMT_EXIT:
           return "EXIT ";
+        case SMT_ABOUT:
+          return "ABOUT";
       }
     }
 
@@ -359,6 +361,15 @@ class DisplaySetting : public Form
           row++;
           drawText(drawX, drawY + (row++ * HIGHT), 1, "*Erase and Reboot*");
           row++;
+          break;
+        case SMT_ABOUT:
+          cursorCMax = 0;
+          row++;
+          drawText(drawX, drawY + (row++ * HIGHT), 1, "   Life Triumph");
+          drawText(drawX, drawY + (row++ * HIGHT), 1, " -MTG LifeCounter-");
+          row++;
+          drawText(drawX, drawY + (row++ * HIGHT), 1, "@keigu1");
+          drawText(drawX, drawY + (row++ * HIGHT), 1, APP_VER);
           break;
       }
     }

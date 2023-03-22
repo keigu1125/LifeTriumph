@@ -202,7 +202,7 @@ class DisplayLog : public Form
       byte maxDigit = 3;
       byte digit = 0;
       bool isMinus = (num < 0);
-    
+
       if (num > 999)
       {
         num = 999;
@@ -211,12 +211,12 @@ class DisplayLog : public Form
       {
         num = -99;
       }
-    
+
       if (isMinus)
       {
         num *= -1;
       }
-    
+
       if (num == 0)
       {
         digit = 1;
@@ -230,21 +230,21 @@ class DisplayLog : public Form
           digit++;
         }
       }
-    
+
       byte sb[maxDigit] = {12, 12, 12};
       short s = num;
-    
+
       for (byte i = 0; i < digit; i++)
       {
         sb[i] = (s % 10);
         s /= 10;
       }
-    
+
       if (isMinus)
       {
         sb[digit] = 11;
       }
-    
+
       for (byte i = 0; i < maxDigit; i++)
       {
         if (isInvert)

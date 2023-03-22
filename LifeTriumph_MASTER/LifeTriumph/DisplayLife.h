@@ -64,7 +64,7 @@ class DisplayLife : public Form
       initPlayerLife();
       saveChangeLife();
     }
-    
+
     virtual void udButton()
     {
       abButton();
@@ -84,6 +84,18 @@ class DisplayLife : public Form
         ab.drawLine(xCenter - 4, yCenter, xCenter, yCenter + 6, WHITE);
         ab.drawLine(xCenter + 4, yCenter, xCenter, yCenter - 6, WHITE);
         ab.drawLine(xCenter + 4, yCenter, xCenter, yCenter + 6, WHITE);
+      }
+
+      // P1 Life UnderLine
+      ab.drawLine(x + 6, y + h - 6, xCenter - 6, y + h - 6, WHITE);
+      // P2 Life UnderLine
+      if (setting.invertOpponent && p[1].invert)
+      {
+        ab.drawLine(xCenter + 6, y + 5, x + w - 6, y + 5, WHITE);
+      }
+      else
+      {
+        ab.drawLine(xCenter + 6, y + h - 6, x + w - 6, y + h - 6, WHITE);
       }
     }
 

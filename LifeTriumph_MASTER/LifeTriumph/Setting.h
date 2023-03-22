@@ -41,7 +41,7 @@ class Setting
     {
       byte point = 16;
       isWritedSetting = EEPROM.read(point++);
-      if (isWritedSetting == 0x00)
+      if (isWritedSetting != DEF_IS_WRITE_SETTING)
       {
         setDefaultSetting();
         return;

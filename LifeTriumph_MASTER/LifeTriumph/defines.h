@@ -1,3 +1,6 @@
+// General
+#define APP_VER "ver 2.10"
+
 // Player.h
 #define CHANGE_LIFE_LOG 3
 
@@ -27,7 +30,6 @@
 #define CARD_MAX     11
 #define DISCARD_MAX  9
 #define STORM_MAX    7
-#define MATCH_MAX    6
 
 //displaySetting.h
 #define HIGHT 8
@@ -55,5 +57,6 @@ enum SettingMenuTitle
   SMT_TIMER = 3,
   SMT_FRAME = 4,
   SMT_EXIT = 5,
-  SMT_TAIL = 5
+  SMT_ABOUT = 6,
+  SMT_TAIL = 6
 };

@@ -10,6 +10,8 @@
 #include "DisplayStorm.h"
 #include "DisplaySetting.h"
 
+char* app_ver = "ver 2.10";
+
 void setup()
 {
   init();
@@ -109,6 +111,7 @@ void dispTitle()
 
   ab.drawBitmap(0, 0, phy_logo, 128, 64, WHITE);
   // ab.drawBitmap(0, 0, blue_footed_booby_logo, 128, 64, WHITE);
+  drawText(80, 55, 1, APP_VER);
 }
 
 void button()

@@ -165,13 +165,13 @@ class DisplayTime : public Form
       {
         return;
       }
-      
+
       long tDisp = tStop - millis();
       if (getSecond(tDisp) != 1 || !isOverTime(tDisp))
       {
         return;
       }
-      
+
       isAlarm = true;
     }
 
@@ -207,7 +207,7 @@ class DisplayTime : public Form
         }
       }
       ab.setRGBled(0, 0, 0);
-      
+
       pressPole = true;
       pressFirst = false;
       isAlarm = false;

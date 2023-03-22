@@ -343,7 +343,7 @@ void initMode()
 
 void initMenuSelect()
 {
-  if (utils[setting.menuDefault]->isEnable)
+  if (setting.isWritedSetting != DEF_IS_WRITE_SETTING && utils[setting.menuDefault]->isEnable)
   {
     menu->cursor = setting.menuDefault;
   }
