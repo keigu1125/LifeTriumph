@@ -1,5 +1,8 @@
 class Setting
 {
+/* 0 - 1024 */
+#define EEPROM_START_POINT 900
+
 #define DEF_IS_WRITE_SETTING    0x01
 #define DEF_SHOW_TITLE          0x01
 #define DEF_IS_LED_TIMER        0x01
@@ -39,7 +42,7 @@ class Setting
 
     void readEepRomSetting()
     {
-      byte point = 16;
+      byte point = EEPROM_START_POINT;
       isWritedSetting = EEPROM.read(point++);
       if (isWritedSetting != DEF_IS_WRITE_SETTING)
       {
@@ -67,8 +70,7 @@ class Setting
 
     void writeEepRomSetting()
     {
-      // *** !! BE CAREFUL !! *** //
-      byte point = 16;
+      byte point = EEPROM_START_POINT;
       EEPROM.write(point++, isWritedSetting);
       EEPROM.write(point++, showTitle);
       EEPROM.write(point++, isLedTimer);

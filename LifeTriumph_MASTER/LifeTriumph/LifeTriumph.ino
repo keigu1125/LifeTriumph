@@ -47,7 +47,7 @@ void setup()
   initMenuSelect();
 
   // **FOR Arduboy EEPROM INITIALIZE**
-  if (abButtonPressed())
+  if (ab.pressed(DOWN_BUTTON))
   {
     activeSetting();
   }
