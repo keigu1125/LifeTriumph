@@ -1,5 +1,5 @@
 // General
-#define APP_VER "ver 2.11"
+#define APP_VER "ver 2.12"
 
 // Player.h
 #define CHANGE_LIFE_LOG 3

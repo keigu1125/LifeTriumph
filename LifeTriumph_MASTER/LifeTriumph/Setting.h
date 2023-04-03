@@ -1,7 +1,7 @@
 class Setting
 {
 /* 0 - 1024 */
-#define EEPROM_START_POINT 900
+#define EEPROM_START_POINT 800
 
 #define DEF_IS_WRITE_SETTING    0x01
 #define DEF_SHOW_TITLE          0x01

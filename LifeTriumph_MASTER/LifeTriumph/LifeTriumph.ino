@@ -10,8 +10,6 @@
 #include "DisplayStorm.h"
 #include "DisplaySetting.h"
 
-char* app_ver = "ver 2.10";
-
 void setup()
 {
   init();
